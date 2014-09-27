@@ -7,6 +7,7 @@ from datetime import datetime
 
 # TODO: add color (green/red) to test results (success/fail)
 # TODO: polish result display - low priority
+# TODO: warning when a solution runs slow
 
 solutions = map(lambda x:x[:-3], filter(lambda x:match('^\d+\.hs$', x), listdir('.')))
 

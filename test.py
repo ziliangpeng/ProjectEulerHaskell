@@ -2,11 +2,10 @@ from os import listdir
 from re import match
 import subprocess
 from datetime import datetime
+from termcolor import colored
 
 """ Auto test program to verify program for each locked problem can run, and can generate correct answer."""
 
-# TODO: add color (green/red) to test results (success/fail)
-# TODO: polish result display - low priority
 # TODO: warning when a solution runs slow
 
 solutions = map(lambda x:x[:-3], filter(lambda x:match('^\d+\.hs$', x), listdir('.')))
@@ -31,18 +30,26 @@ for prob_id in answers:
     time_after = datetime.now()
     result = result.split()[-1].strip() # only interested in the last line which is the answer
     print 'running time %s' % str(time_after - time_before)
-    print 'expected %s, get %s,' % (answer, result),
+    print 'expected %16s, get %16s,' % (answer, result),
     if result == answer:
-        print 'success!'
+        print colored('success', 'green') + '!'
         success_cnt += 1
     else:
-        print 'fail!'
+        print colored('fail', 'red') + '!'
         fail_cnt += 1
     print ''
 
     solutions.remove(prob_id)
 
-print '%d tested, %d success, %d fail.' % (success_cnt + fail_cnt, success_cnt, fail_cnt)
+print '%d tested,' % (success_cnt + fail_cnt),
+
+if success_cnt + fail_cnt == 0:
+    print 'nothing to test.'
+elif fail_cnt == 0:
+    print colored('all passed', 'green') + '!'
+else:
+    print success_cnt, colored(success_cnt, 'green'),
+    print fail_cnt, colored(fail_cnt, 'red')
 
 if solutions:
     print 'untested solutions (because of lack of answer):', solutions
